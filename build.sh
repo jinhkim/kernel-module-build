@@ -76,6 +76,7 @@ function list_versions()
 # ..._<device>_<version> suffix.
 function get_and_build()
 {
+	echo "getting and building kernel module for $1"
 	local path="$1"
 	local pattern="^images/(.*)/(.*)/"
 	[[ "$path" =~ $pattern ]] || fatal "Invalid path '$path'?!"
@@ -149,8 +150,11 @@ module_dir="$3"
 
 seen=''
 
-echo "Fetching list from servers"
-for path in $(get_header_paths "$device" "$version"); do
+echo "Fetching list from servers for device: $device, version: $version"
+_header_paths=$(get_header_paths "$device" "$version")
+echo "got paths: $_header_paths"
+echo "...... now building paths"
+for path in $_header_paths; do
 	echo "Building $path..."
 
 	get_and_build $path

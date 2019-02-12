@@ -1,10 +1,66 @@
-FROM balenalib/%%RESIN_MACHINE_NAME%%-debian
+FROM balenalib/jetson-tx2-ubuntu-node:latest
 
-RUN apt-get update && apt-get install -y curl wget build-essential libelf-dev awscli
+RUN echo "debconf debconf/frontend select Noninteractive" | debconf-set-selections
+RUN apt-get update && apt-get install -y curl wget build-essential 
+# Install essential packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    apt-utils \
+    awscli \
+    libelf-dev \
+    openssh-server   \ 
+    iproute2 \
+    git   \
+    curl    \
+    python-pip  \
+    iputils-ping \
+    net-tools \
+    unzip \
+    nano \    
+    wget \
+    usbutils \
+    iw	\
+    wireless-tools \
+    vim \
+    module-init-tools \
+    xserver-xorg-legacy \
+    xserver-xorg-core \
+    xserver-xorg-input-all \
+    xserver-xorg-video-fbdev \
+    xserver-xorg-input-evdev \
+    xorg \
+    xinput \
+    xinput-calibrator \
+    x11-apps \
+    matchbox-window-manager \
+    xinit \
+    pciutils \
+    tmux \
+    build-essential \
+    xorg-dev \
+    libx11-dev \
+    libxtst-dev \
+    xterm \
+    gdb \
+    htop \
+    xdotool \
+    libelf-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY xinitrc xinitrc
+
+
+#COPY touch_event_clicker.c /touch_event_clicker.c
+#RUN gcc touch_event_clicker.c -o touch_event_clicker -lX11 -lXtst && \
+#mv touch_event_clicker /usr/bin && \
+#rm touch_event_clicker.c
+
+RUN echo "finished installing dependencies... building kernel module"
+
 COPY . /usr/src/app
 WORKDIR /usr/src/app
 
-ENV VERSION '2.29.0+rev1.prod'
-RUN ./build.sh %%RESIN_MACHINE_NAME%% $VERSION example_module
+ENV VERSION '2.29.2+rev1.dev'
+ENV DRIVER_NAME egalax_ts
+RUN ./build.sh jetson-tx2 $VERSION egalax_touchscreen_driver
 
 CMD ./run.sh
