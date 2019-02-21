@@ -61,6 +61,7 @@ WORKDIR /usr/src/app
 
 ENV VERSION '2.29.2+rev1.dev'
 ENV DRIVER_NAME egalax_ts
+ENV UDEV 1
 RUN ./build.sh jetson-tx2 $VERSION egalax_touchscreen_driver
 
 CMD ./run.sh
