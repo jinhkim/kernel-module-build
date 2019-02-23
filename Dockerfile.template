@@ -2,7 +2,8 @@ FROM eisfw/ecoation-ros-app:latest
 
 COPY entry.sh /home/eis/entry.sh
 COPY run.sh /home/eis/run.sh
+COPY xinitrc /home/eis/xinitrc
 WORKDIR /home/eis
 
 #ENTRYPOINT ["/bin/bash"]
-CMD ["./run.sh"]
+CMD ./run.sh
