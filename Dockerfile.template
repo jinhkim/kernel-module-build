@@ -1,5 +1,8 @@
 FROM eisfw/ecoation-ros-app:latest
 
+COPY entry.sh /home/eis/entry.sh
+COPY run.sh /home/eis/run.sh
 WORKDIR /home/eis
 
-CMD ./run.sh
+#ENTRYPOINT ["/bin/bash"]
+CMD ["./run.sh"]
